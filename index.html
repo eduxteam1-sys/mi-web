@@ -1,98 +1,126 @@
-
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JREX | Premium Experience</title>
+    <title>JREX | Design & Advertising Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --bg-main: #0f1115;
+        --bg-sec: #15181e;
+        --border-subtle: #22262e;
+        --text-main: #e6e6e6;
+        --text-sec: #9aa0a6;
+      }
       body {
-        font-family: 'Inter', sans-serif;
-        background-color: #050505;
-        color: #fff;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
         overflow-x: hidden;
-        cursor: none; /* Hide default cursor */
+        -webkit-font-smoothing: antialiased;
       }
-      a, button {
-        cursor: none;
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
       }
-      .font-syncopate {
-        font-family: 'Syncopate', sans-serif;
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
       }
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #000;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
-
-      /* Custom Cursor Styles */
-      #custom-cursor {
-        position: fixed;
-        width: 20px;
-        height: 20px;
-        background-color: white;
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        mix-blend-mode: difference;
-        transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease;
-        transform: translate(-50%, -50%);
-      }
-      .hovering #custom-cursor {
-        width: 60px;
-        height: 60px;
-      }
-
-      /* WhatsApp Glow Animation */
-      @keyframes green-halo {
-        0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-        70% { box-shadow: 0 0 0 25px rgba(37, 211, 102, 0); }
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: var(--bg-main); }
+      ::-webkit-scrollbar-thumb { background: #333; }
+      
+      @keyframes green-halo-subtle {
+        0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
         100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
       }
-      .whatsapp-halo {
-        animation: green-halo 2s infinite;
+      .whatsapp-halo { animation: green-halo-subtle 2.5s infinite; }
+
+      /* Border Light Animation */
+      @keyframes rotate-border {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .animated-border {
+        position: relative;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .animated-border::before {
+        content: '';
+        position: absolute;
+        z-index: -2;
+        left: -50%;
+        top: -50%;
+        width: 200%;
+        height: 200%;
+        background-color: #22262e;
+        background-repeat: no-repeat;
+        background-size: 50% 50%, 50% 50%;
+        background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+        background-image: conic-gradient(transparent, rgba(255, 255, 255, 0.2), rgba(0, 150, 255, 0.2), rgba(255, 0, 150, 0.2), transparent);
+        animation: rotate-border 6s linear infinite;
+      }
+
+      .animated-border::after {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        left: 1px;
+        top: 1px;
+        width: calc(100% - 2px);
+        height: calc(100% - 2px);
+        background: inherit;
+        border-radius: inherit;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+    <script type="importmap">
+    {
+      "imports": {
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "react": "https://esm.sh/react@^19.2.4"
+      }
+    }
+    </script>
+  <link rel="stylesheet" href="/index.css">
 </head>
   <body>
-    <div id="custom-cursor"></div>
     <div id="root"></div>
     <script>
-      const cursor = document.getElementById('custom-cursor');
-      document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-      });
+      // Lightweight Reveal Logic
+      const observerOptions = { threshold: 0.1 };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
 
-      document.addEventListener('mouseover', (e) => {
-        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('h1') || e.target.closest('h2')) {
-          document.body.classList.add('hovering');
-        } else {
-          document.body.classList.remove('hovering');
+      // We re-check for reveal elements when DOM changes
+      const setupObserver = () => {
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      };
+      
+      const config = { childList: true, subtree: true };
+      const callback = (mutationsList) => {
+        for(const mutation of mutationsList) {
+          if (mutation.type === 'childList') setupObserver();
         }
-      });
+      };
+      const mutationObserver = new MutationObserver(callback);
+      mutationObserver.observe(document.body, config);
     </script>
   <script type="module" src="/index.tsx"></script>
 </body>

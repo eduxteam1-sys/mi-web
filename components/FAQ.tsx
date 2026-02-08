@@ -5,43 +5,39 @@ const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqs = [
-    { q: '¿Cómo es su proceso creativo?', a: 'Iniciamos con una fase de inmersión estratégica para entender su marca, seguida de exploración conceptual y ejecución técnica de alta precisión.' },
-    { q: '¿Trabajan con startups o solo grandes empresas?', a: 'Trabajamos con cualquier marca que busque la excelencia. Valoramos la ambición y la visión sobre el tamaño de la organización.' },
-    { q: '¿Qué servicios de publicidad ofrecen?', a: 'Desde campañas de redes sociales de alto rendimiento hasta dirección de arte para medios tradicionales y branding 360.' },
-    { q: '¿Cuáles son los plazos de entrega?', a: 'Varían según la complejidad, pero priorizamos la calidad sobre la velocidad. Un branding completo suele tomar entre 4 y 8 semanas.' },
+    { q: '¿Qué tiempo toma un proyecto?', a: 'Normalmente entre 3 y 6 semanas dependiendo del alcance.' },
+    { q: '¿Ofrecen mantenimiento?', a: 'Sí, contamos con planes de soporte mensual para todos nuestros desarrollos.' },
+    { q: '¿Cómo iniciamos?', a: 'Agendamos una breve llamada de descubrimiento para entender sus objetivos.' }
   ];
 
   return (
-    <div className="py-32 bg-black">
-      <div className="max-w-3xl mx-auto px-6">
-        <h2 className="text-3xl font-bold font-syncopate mb-16 text-center tracking-[0.2em] uppercase">Metodología</h2>
-        
-        <div className="space-y-6">
-          {faqs.map((faq, i) => (
-            <div 
-              key={i} 
-              className="border-b border-white/10 pb-6 cursor-pointer group"
+    <div className="py-24 px-6 max-w-3xl mx-auto">
+      <h2 className="text-2xl font-semibold text-white mb-12 text-center reveal">Preguntas Frecuentes</h2>
+      
+      <div className="space-y-6">
+        {faqs.map((faq, i) => (
+          <div 
+            key={i} 
+            className="reveal border border-[#22262e] bg-[#15181e]/80 backdrop-blur-sm overflow-hidden rounded-md animated-border"
+            style={{ transitionDelay: `${i * 0.1}s` }}
+          >
+            <button 
+              className="relative w-full p-6 text-left flex justify-between items-center z-10 bg-transparent"
               onClick={() => setOpenIndex(openIndex === i ? null : i)}
             >
-              <div className="flex justify-between items-center group-hover:pl-2 transition-all duration-300">
-                <h3 className="text-sm font-bold uppercase tracking-widest text-gray-400 group-hover:text-white">{faq.q}</h3>
-                <span className={`text-xl transition-transform duration-500 ${openIndex === i ? 'rotate-45' : ''}`}>+</span>
+              <span className="text-sm font-medium text-[#e6e6e6] tracking-tight">{faq.q}</span>
+              <span className={`text-[#9aa0a6] transition-transform duration-200 ${openIndex === i ? 'rotate-180' : ''}`}>
+                ↓
+              </span>
+            </button>
+            {openIndex === i && (
+              <div className="relative z-10 px-6 pb-6 text-sm text-[#9aa0a6] font-light leading-relaxed bg-transparent">
+                {faq.a}
               </div>
-              {openIndex === i && (
-                <div className="mt-6 text-gray-500 text-sm leading-relaxed animate-[fadeIn_0.5s_ease-out]">
-                  {faq.a}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+            )}
+          </div>
+        ))}
       </div>
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 };

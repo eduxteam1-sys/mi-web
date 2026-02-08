@@ -1,17 +1,15 @@
-
 import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="py-16 bg-transparent px-6 border-t border-white/5">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+    <footer className="py-12 bg-[#0f1115] px-6 border-t border-[#22262e]">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-center md:text-left">
-          <h2 className="text-xl font-black font-syncopate tracking-widest mb-1">JREX</h2>
-          <p className="text-[9px] text-gray-500 uppercase tracking-[0.4em]">Diseño Disruptivo. Publicidad Memorable.</p>
+          <h2 className="text-lg font-semibold tracking-tight text-white mb-1">JREX STUDIO</h2>
+          <p className="text-[10px] text-[#9aa0a6] uppercase tracking-[0.3em] font-light">Minimalist Design & Strategic Advertising</p>
         </div>
-
-        <div className="text-[10px] text-gray-700 uppercase tracking-widest font-medium text-center">
-          &copy; {new Date().getFullYear()} JREX CREATIVE STUDIO. TODOS LOS DERECHOS RESERVADOS.
+        <div className="text-[10px] text-[#9aa0a6] uppercase tracking-[0.2em] font-medium">
+          &copy; {new Date().getFullYear()} JREX CREATIVE.
         </div>
       </div>
     </footer>

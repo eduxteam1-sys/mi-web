@@ -1,44 +1,39 @@
-
 import React from 'react';
 
 const Services: React.FC = () => {
   const features = [
-    { title: 'Branding', desc: 'Identidades visuales que perduran en el tiempo' },
-    { title: 'Publicidad', desc: 'Campañas de alto impacto emocional' },
-    { title: 'Digital', desc: 'Experiencias web inmersivas y fluidas' },
-    { title: 'Estrategia', desc: 'Análisis de mercado y posicionamiento premium' },
+    { title: 'Branding', desc: 'Identidades visuales consistentes y atemporales.' },
+    { title: 'Publicidad', desc: 'Campañas digitales optimizadas para conversión.' },
+    { title: 'UX/UI Design', desc: 'Interfaces funcionales de alto impacto visual.' },
+    { title: 'Estrategia', desc: 'Consultoría creativa para marcas en expansión.' },
   ];
 
   return (
-    <div className="py-32 bg-black overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-24 items-center">
-          <div className="relative group">
-            <div className="absolute -inset-4 bg-white/5 blur-3xl rounded-full transition-all group-hover:bg-white/10"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" 
-              alt="Design Process" 
-              className="relative z-10 w-full h-auto rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000 transform hover:scale-[1.02]"
-            />
-          </div>
-          
-          <div>
-            <span className="text-xs tracking-[0.5em] text-gray-500 uppercase mb-4 block">Artesanía Digital</span>
-            <h2 className="text-5xl md:text-7xl font-bold font-syncopate mb-12 tracking-tighter uppercase">Servicios</h2>
-            <p className="text-gray-400 text-lg leading-relaxed mb-12 font-light">
-              No solo diseñamos imágenes; construimos narrativas visuales. Cada píxel es una decisión estratégica destinada a elevar el valor percibido de su marca.
+    <div className="py-24 px-6 max-w-7xl mx-auto">
+      <div className="reveal">
+        <h2 className="text-[clamp(1.5rem,4vw,2.5rem)] font-semibold text-white mb-4 tracking-tight">
+          Nuestros Servicios
+        </h2>
+        <p className="text-[#9aa0a6] max-w-xl text-[1.1rem] font-light mb-16">
+          Soluciones de diseño centradas en el usuario y publicidad basada en datos.
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {features.map((f, i) => (
+          <div 
+            key={i} 
+            className="reveal p-8 border border-[#22262e] bg-[#0f1115] hover:border-[#2c313a] transition-colors"
+            style={{ transitionDelay: `${i * 0.1}s` }}
+          >
+            <h3 className="text-white text-lg font-semibold mb-3 tracking-tight">
+              {f.title}
+            </h3>
+            <p className="text-[#9aa0a6] text-sm leading-relaxed font-light">
+              {f.desc}
             </p>
-            
-            <div className="grid grid-cols-2 gap-x-8 gap-y-12">
-              {features.map((f) => (
-                <div key={f.title} className="group cursor-default">
-                  <h3 className="text-white text-sm font-bold uppercase tracking-widest mb-2 group-hover:text-gray-400 transition-colors">{f.title}</h3>
-                  <p className="text-gray-500 text-xs tracking-wider">{f.desc}</p>
-                </div>
-              ))}
-            </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
