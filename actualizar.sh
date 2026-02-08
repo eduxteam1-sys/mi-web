@@ -3,6 +3,7 @@
 echo "=============================="
 echo "Actualizando repositorio..."
 echo "=============================="
+echo ""
 
 cd "$(dirname "$0")"
 
@@ -11,6 +12,8 @@ git commit -m "auto update $(date '+%Y-%m-%d %H:%M:%S')"
 git push
 
 echo ""
-echo "Listo ✔ GitHub actualizado"
+echo "✔ Proceso terminado"
+echo ""
 read -p "Presiona ENTER para cerrar..."
 
+exit
