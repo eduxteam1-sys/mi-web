@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 
 const FAQ: React.FC = () => {
@@ -12,29 +11,30 @@ const FAQ: React.FC = () => {
 
   return (
     <div className="py-24 px-6 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-semibold text-white mb-12 text-center reveal">Preguntas Frecuentes</h2>
+      <h2 className="text-xl font-semibold text-white mb-16 text-center reveal tracking-tight opacity-80 uppercase tracking-[0.2em]">
+        Preguntas Frecuentes
+      </h2>
       
-      <div className="space-y-6">
+      <div className="space-y-4">
         {faqs.map((faq, i) => (
           <div 
             key={i} 
-            className="reveal border border-[#22262e] bg-[#15181e]/80 backdrop-blur-sm overflow-hidden rounded-md animated-border"
-            style={{ transitionDelay: `${i * 0.1}s` }}
+            className="border-b border-[#22262e]/50 bg-transparent transition-all duration-300"
           >
             <button 
-              className="relative w-full p-6 text-left flex justify-between items-center z-10 bg-transparent"
+              className="w-full py-8 text-left flex justify-between items-center group"
               onClick={() => setOpenIndex(openIndex === i ? null : i)}
             >
-              <span className="text-sm font-medium text-[#e6e6e6] tracking-tight">{faq.q}</span>
-              <span className={`text-[#9aa0a6] transition-transform duration-200 ${openIndex === i ? 'rotate-180' : ''}`}>
-                ↓
+              <span className="text-sm font-light text-[#e6e6e6] tracking-tight group-hover:text-white transition-colors">{faq.q}</span>
+              <span className={`text-[10px] text-[#9aa0a6] transition-transform duration-500 ${openIndex === i ? 'rotate-180' : ''}`}>
+                {openIndex === i ? '—' : '+'}
               </span>
             </button>
-            {openIndex === i && (
-              <div className="relative z-10 px-6 pb-6 text-sm text-[#9aa0a6] font-light leading-relaxed bg-transparent">
+            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${openIndex === i ? 'max-h-40 pb-8 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <p className="text-sm text-[#9aa0a6] font-light leading-relaxed max-w-xl">
                 {faq.a}
-              </div>
-            )}
+              </p>
+            </div>
           </div>
         ))}
       </div>

@@ -7,13 +7,16 @@ const LoadingScreen: React.FC = () => {
         <h1 className="text-4xl font-semibold tracking-tighter text-white">
           JREX
         </h1>
-        <div className="absolute -bottom-2 left-0 h-[1px] bg-white w-full scale-x-0 animate-[loading-line_1s_ease-in-out_infinite]"></div>
+        <div 
+          className="absolute -bottom-2 left-0 h-[1px] bg-white w-full scale-x-0 animate-[loading-line_0.8s_cubic-bezier(0.65,0,0.35,1)_infinite]"
+          style={{ willChange: 'transform' }}
+        ></div>
       </div>
       <style>{`
         @keyframes loading-line {
           0% { transform: scaleX(0); transform-origin: left; }
-          50% { transform: scaleX(1); transform-origin: left; }
-          51% { transform: scaleX(1); transform-origin: right; }
+          45% { transform: scaleX(1); transform-origin: left; }
+          50% { transform: scaleX(1); transform-origin: right; }
           100% { transform: scaleX(0); transform-origin: right; }
         }
       `}</style>
