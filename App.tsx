@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Product';
+import DataFlowUI from './components/DataFlowUI';
 import Reviews from './components/Reviews';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
@@ -30,16 +31,15 @@ const App: React.FC = () => {
       <Navbar />
       
       {/* Global Vector Connector UI (Strategy in Motion) */}
-      <div className="fixed inset-0 pointer-events-none z-[5] overflow-hidden opacity-20">
+      <div className="fixed inset-0 pointer-events-none z-[5] overflow-hidden opacity-10">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          {/* Main flow to WhatsApp */}
           <path 
             d="M 50% 0 L 50% 100% M 50% 80% C 70% 80% 90% 90% calc(100% - 48px) calc(100% - 48px)" 
             stroke="url(#globalGradient)" 
             strokeWidth="0.5" 
             fill="none" 
             strokeDasharray="10 20"
-            className="animate-[dash-global_30s_linear_infinite]"
+            className="animate-dash-global"
           />
           <defs>
             <linearGradient id="globalGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -57,9 +57,7 @@ const App: React.FC = () => {
           <Services />
         </section>
 
-        <div className="py-20 opacity-10 px-6 max-w-7xl mx-auto">
-          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white to-transparent"></div>
-        </div>
+        <DataFlowUI />
 
         <section id="reviews" className="bg-transparent">
           <Reviews />
@@ -80,6 +78,9 @@ const App: React.FC = () => {
       <style>{`
         @keyframes dash-global {
           to { stroke-dashoffset: -500; }
+        }
+        .animate-dash-global {
+          animation: dash-global 60s linear infinite;
         }
       `}</style>
     </div>

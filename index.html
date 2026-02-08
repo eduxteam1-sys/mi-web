@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JREX | Design & Advertising Studio</title>
+    <title>JREX | Design & AI Automation Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;800&display=swap" rel="stylesheet">
     <style>
       :root {
-        --bg-main: #0f1115;
-        --bg-sec: #15181e;
-        --border-subtle: #22262e;
+        --bg-main: #0a0b0d;
         --text-main: #e6e6e6;
         --text-sec: #9aa0a6;
+        --accent-blue: #3b82f6;
+        --accent-cyan: #06b6d4;
       }
       body {
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -22,65 +22,47 @@
         color: var(--text-main);
         overflow-x: hidden;
         -webkit-font-smoothing: antialiased;
+        cursor: none; /* Hide default cursor for custom implementation */
       }
       .reveal {
         opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        transform: translateY(30px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .reveal.active {
         opacity: 1;
         transform: translateY(0);
       }
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-track { background: var(--bg-main); }
-      ::-webkit-scrollbar-thumb { background: #333; }
       
-      @keyframes green-halo-subtle {
-        0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
-        70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+      /* Inverted Cursor */
+      #custom-cursor {
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transition: transform 0.15s ease-out;
+      }
+
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-track { background: var(--bg-main); }
+      ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+      
+      @keyframes whatsapp-green-aura {
+        0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
+        70% { box-shadow: 0 0 0 25px rgba(37, 211, 102, 0); }
         100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
       }
-      .whatsapp-halo { animation: green-halo-subtle 2.5s infinite; }
+      .whatsapp-halo { animation: whatsapp-green-aura 3s infinite; }
 
-      /* Border Light Animation */
-      @keyframes rotate-border {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+      .perspective-hero {
+        perspective: 2000px;
       }
-
-      .animated-border {
-        position: relative;
-        overflow: hidden;
-        z-index: 0;
-      }
-
-      .animated-border::before {
-        content: '';
-        position: absolute;
-        z-index: -2;
-        left: -50%;
-        top: -50%;
-        width: 200%;
-        height: 200%;
-        background-color: #22262e;
-        background-repeat: no-repeat;
-        background-size: 50% 50%, 50% 50%;
-        background-position: 0 0, 100% 0, 100% 100%, 0 100%;
-        background-image: conic-gradient(transparent, rgba(255, 255, 255, 0.2), rgba(0, 150, 255, 0.2), rgba(255, 0, 150, 0.2), transparent);
-        animation: rotate-border 6s linear infinite;
-      }
-
-      .animated-border::after {
-        content: '';
-        position: absolute;
-        z-index: -1;
-        left: 1px;
-        top: 1px;
-        width: calc(100% - 2px);
-        height: calc(100% - 2px);
-        background: inherit;
-        border-radius: inherit;
+      .preserve-3d {
+        transform-style: preserve-3d;
       }
     </style>
     <script type="importmap">
@@ -95,32 +77,30 @@
   <link rel="stylesheet" href="/index.css">
 </head>
   <body>
+    <div id="custom-cursor"></div>
     <div id="root"></div>
     <script>
-      // Lightweight Reveal Logic
-      const observerOptions = { threshold: 0.1 };
+      const cursor = document.getElementById('custom-cursor');
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      });
+
+      // Reveal Logic
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('active');
-            observer.unobserve(entry.target);
           }
         });
-      }, observerOptions);
+      }, { threshold: 0.1 });
 
-      // We re-check for reveal elements when DOM changes
       const setupObserver = () => {
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
       };
       
-      const config = { childList: true, subtree: true };
-      const callback = (mutationsList) => {
-        for(const mutation of mutationsList) {
-          if (mutation.type === 'childList') setupObserver();
-        }
-      };
-      const mutationObserver = new MutationObserver(callback);
-      mutationObserver.observe(document.body, config);
+      const mutationObserver = new MutationObserver(() => setupObserver());
+      mutationObserver.observe(document.body, { childList: true, subtree: true });
     </script>
   <script type="module" src="/index.tsx"></script>
 </body>

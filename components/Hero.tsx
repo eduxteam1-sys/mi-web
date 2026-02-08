@@ -2,168 +2,126 @@ import React, { useRef, useEffect } from 'react';
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const state = useRef({
-    mouseX: 0.5,
-    mouseY: 0.5,
-    currentX: 0.5,
-    currentY: 0.5,
-    lerp: 0.08,
+    mouseX: 0,
+    mouseY: 0,
+    targetX: 0,
+    targetY: 0,
+    currentX: 0,
+    currentY: 0,
+    lerp: 0.1
   });
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      state.current.mouseX = x;
-      state.current.mouseY = y;
-    };
-
-    const handleMouseLeave = () => {
-      state.current.mouseX = 0.5;
-      state.current.mouseY = 0.5;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      state.current.targetX = (e.clientX - centerX) / (window.innerWidth / 2);
+      state.current.targetY = (e.clientY - centerY) / (window.innerHeight / 2);
     };
 
     const update = () => {
-      const { mouseX, mouseY, currentX, currentY, lerp } = state.current;
-      
-      state.current.currentX += (mouseX - currentX) * lerp;
-      state.current.currentY += (mouseY - currentY) * lerp;
+      state.current.currentX += (state.current.targetX - state.current.currentX) * state.current.lerp;
+      state.current.currentY += (state.current.targetY - state.current.currentY) * state.current.lerp;
 
-      if (titleRef.current) {
-        // Tilt effect
-        const rotateY = (state.current.currentX - 0.5) * 15; 
-        const rotateX = (state.current.currentY - 0.5) * -15; 
+      if (cardRef.current) {
+        const rotateY = state.current.currentX * 28; 
+        const rotateX = state.current.currentY * -28;
         
-        // Holographic Shine position
-        const shineX = state.current.currentX * 100;
-        const shineY = state.current.currentY * 100;
-
-        titleRef.current.style.setProperty('--rx', `${rotateX}deg`);
-        titleRef.current.style.setProperty('--ry', `${rotateY}deg`);
-        titleRef.current.style.setProperty('--sx', `${shineX}%`);
-        titleRef.current.style.setProperty('--sy', `${shineY}%`);
+        cardRef.current.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        
+        const shineX = (state.current.currentX + 1) * 50;
+        const shineY = (state.current.currentY + 1) * 50;
+        cardRef.current.style.setProperty('--sx', `${shineX}%`);
+        cardRef.current.style.setProperty('--sy', `${shineY}%`);
       }
 
       rafRef.current = requestAnimationFrame(update);
     };
 
-    container.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handleMouseMove);
     rafRef.current = requestAnimationFrame(update);
 
     return () => {
-      container.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('mousemove', handleMouseMove);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
   return (
-    <div 
-      ref={containerRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-transparent perspective-[1000px]"
-    >
-      {/* UI Connector Vector Lines linking the workspace */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden flex items-center justify-center">
-        <svg className="w-full h-full max-w-[90vw] max-h-[50vh] opacity-30" viewBox="0 0 1000 400" fill="none">
-          {/* Subtle connecting logic lines */}
-          <path d="M100,200 Q300,50 500,200 T900,200" stroke="rgba(59, 130, 246, 0.1)" strokeWidth="0.5" fill="none" />
-          <path d="M200,300 Q500,100 800,300" stroke="rgba(6, 182, 212, 0.1)" strokeWidth="0.5" fill="none" />
-          
-          {/* Active Data Pulses */}
-          <circle r="1.5" fill="#3b82f6" className="animate-pulse">
-            <animateMotion dur="8s" repeatCount="indefinite" path="M100,200 Q300,50 500,200 T900,200" />
-          </circle>
-          <circle r="1.5" fill="#06b6d4" className="animate-pulse">
-            <animateMotion dur="12s" repeatCount="indefinite" path="M200,300 Q500,100 800,300" />
-          </circle>
-        </svg>
-      </div>
-
+    <div ref={containerRef} className="relative min-h-screen flex items-center justify-center overflow-hidden perspective-hero bg-transparent">
       <div 
-        ref={titleRef}
-        className="relative z-10 flex flex-col items-center justify-center text-center transition-transform duration-100 ease-out preserve-3d"
-        style={{
-          transform: 'rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))',
-          willChange: 'transform'
-        } as React.CSSProperties}
+        ref={cardRef} 
+        className="preserve-3d flex flex-col items-center justify-center transition-transform duration-75 ease-out pointer-events-none"
       >
-        <span className="text-[10px] md:text-[12px] tracking-[0.8em] text-[#9aa0a6] uppercase font-light mb-8 block opacity-0 animate-[fade-in-up_1s_ease-out_forwards]">
-          Estrategia y Diseño premium
-        </span>
-        
-        <h1 
-          className="text-[clamp(6rem,25vw,22rem)] font-bold tracking-tighter leading-none select-none holographic-text relative"
-          style={{
-            backgroundImage: `
-              radial-gradient(
-                circle at var(--sx, 50%) var(--sy, 50%),
-                rgba(255, 255, 255, 1) 0%,
-                rgba(150, 180, 255, 0.4) 20%,
-                rgba(100, 100, 110, 0.1) 45%,
-                transparent 100%
-              ),
-              linear-gradient(to bottom, #ffffff 5%, #222222 95%)
-            `,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.7))'
-          } as React.CSSProperties}
-        >
-          JREX
-          
-          {/* Internal UI Vector path connecting letters */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 800 300" style={{ mixBlendMode: 'plus-lighter' }}>
-             <path 
-                d="M180,150 C250,80 550,80 620,150" 
-                stroke="url(#textGradient)" 
-                strokeWidth="1.5" 
-                fill="none" 
-                strokeDasharray="4 8"
-                className="opacity-40 animate-[dash_20s_linear_infinite]" 
-             />
-             <defs>
-               <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                 <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
-                 <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
-                 <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
-               </linearGradient>
-             </defs>
-          </svg>
-        </h1>
+        <div className="relative pointer-events-auto flex flex-col items-center">
+          <span className="text-[10px] md:text-[12px] tracking-[0.8em] text-[#9aa0a6] uppercase font-light mb-4 block text-center opacity-80" style={{ transform: 'translateZ(60px)' }}>
+            Estrategia y Diseño premium
+          </span>
+
+          <h1 
+            className="text-[clamp(6rem,28vw,24rem)] font-extrabold tracking-tighter leading-none select-none holographic-text relative py-4 px-8"
+            style={{
+              backgroundImage: `
+                radial-gradient(
+                  circle at var(--sx, 50%) var(--sy, 50%),
+                  rgba(255, 255, 255, 1) 0%,
+                  rgba(100, 200, 255, 0.4) 15%,
+                  rgba(50, 50, 60, 0.1) 40%,
+                  transparent 80%
+                ),
+                linear-gradient(to bottom, #ffffff 15%, #222222 85%)
+              `,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.8))',
+              transform: 'translateZ(120px)'
+            } as React.CSSProperties}
+          >
+            JREX
+
+            {/* UI Connectors following letter paths - simulating letter silhouettes */}
+            <svg className="absolute inset-0 w-full h-full opacity-60 mix-blend-screen" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet">
+              {/* 'J' logic line */}
+              <path d="M240,150 L240,240 Q240,280 200,280" stroke="url(#lineGrad)" strokeWidth="1.2" fill="none" strokeDasharray="3 6" className="animate-dash" />
+              {/* 'R' logic loop */}
+              <path d="M380,280 L380,150 Q450,150 450,195 Q450,240 380,240 L450,280" stroke="url(#lineGrad)" strokeWidth="1.2" fill="none" strokeDasharray="3 6" className="animate-dash" style={{ animationDelay: '-2s' }} />
+              {/* 'E' logic spine */}
+              <path d="M600,150 L530,150 L530,280 L600,280 M530,215 L580,215" stroke="url(#lineGrad)" strokeWidth="1.2" fill="none" strokeDasharray="3 6" className="animate-dash" style={{ animationDelay: '-4s' }} />
+              {/* 'X' logic cross */}
+              <path d="M680,150 L780,280 M780,150 L680,280" stroke="url(#lineGrad)" strokeWidth="1.2" fill="none" strokeDasharray="3 6" className="animate-dash" style={{ animationDelay: '-6s' }} />
+              
+              <defs>
+                <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#3b82f6" />
+                  <stop offset="100%" stopColor="#06b6d4" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </h1>
+        </div>
       </div>
 
-      {/* Connection Flow down to Services */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-24 w-[1px] bg-gradient-to-b from-blue-500/40 to-transparent">
-        <div className="w-[3px] -left-[1px] absolute top-0 bg-blue-400 blur-[2px] h-full animate-[flow-down_4s_infinite]"></div>
+      {/* Floating UI Detail */}
+      <div className="absolute top-1/4 left-10 opacity-20 hidden md:block" style={{ transform: 'rotate(-15deg)' }}>
+        <div className="border border-white/10 p-2 rounded text-[8px] uppercase tracking-widest text-blue-400">System_Active // 001</div>
+      </div>
+      <div className="absolute bottom-1/4 right-10 opacity-20 hidden md:block" style={{ transform: 'rotate(15deg)' }}>
+        <div className="border border-white/10 p-2 rounded text-[8px] uppercase tracking-widest text-cyan-400">Logic_Path // TRACE</div>
       </div>
 
       <style>{`
         .holographic-text {
           background-size: 250% 250%;
-          transition: background-position 0.15s ease-out;
-        }
-        .preserve-3d {
-          transform-style: preserve-3d;
-        }
-        @keyframes fade-in-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+          transition: background-position 0.1s ease-out;
         }
         @keyframes dash {
           to { stroke-dashoffset: -100; }
         }
-        @keyframes flow-down {
-          0% { transform: translateY(-100%); opacity: 0; }
-          20% { opacity: 1; }
-          80% { opacity: 1; }
-          100% { transform: translateY(200%); opacity: 0; }
+        .animate-dash {
+          animation: dash 10s linear infinite;
         }
       `}</style>
     </div>
