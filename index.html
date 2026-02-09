@@ -1,107 +1,42 @@
+
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JREX | Design & AI Automation Studio</title>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sofía AI - Experiencia de Voz</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-      :root {
-        --bg-main: #0a0b0d;
-        --text-main: #e6e6e6;
-        --text-sec: #9aa0a6;
-        --accent-blue: #3b82f6;
-        --accent-cyan: #06b6d4;
-      }
-      body {
-        font-family: 'Inter', system-ui, -apple-system, sans-serif;
-        background-color: var(--bg-main);
-        color: var(--text-main);
-        overflow-x: hidden;
-        -webkit-font-smoothing: antialiased;
-        cursor: none; /* Hide default cursor for custom implementation */
-      }
-      .reveal {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      .reveal.active {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      
-      /* Inverted Cursor */
-      #custom-cursor {
-        width: 20px;
-        height: 20px;
-        background: white;
-        border-radius: 50%;
-        position: fixed;
-        pointer-events: none;
-        z-index: 9999;
-        mix-blend-mode: difference;
-        transition: transform 0.15s ease-out;
-      }
-
-      ::-webkit-scrollbar { width: 4px; }
-      ::-webkit-scrollbar-track { background: var(--bg-main); }
-      ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-      
-      @keyframes whatsapp-green-aura {
-        0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6); }
-        70% { box-shadow: 0 0 0 25px rgba(37, 211, 102, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-      }
-      .whatsapp-halo { animation: whatsapp-green-aura 3s infinite; }
-
-      .perspective-hero {
-        perspective: 2000px;
-      }
-      .preserve-3d {
-        transform-style: preserve-3d;
-      }
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #020617;
+            touch-action: manipulation;
+        }
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        *::-webkit-scrollbar {
+            display: none;
+        }
     </style>
-    <script type="importmap">
-    {
-      "imports": {
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "react": "https://esm.sh/react@^19.2.4"
-      }
-    }
-    </script>
-  <link rel="stylesheet" href="/index.css">
+<script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="custom-cursor"></div>
+<body>
     <div id="root"></div>
-    <script>
-      const cursor = document.getElementById('custom-cursor');
-      document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-      });
-
-      // Reveal Logic
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-          }
-        });
-      }, { threshold: 0.1 });
-
-      const setupObserver = () => {
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-      };
-      
-      const mutationObserver = new MutationObserver(() => setupObserver());
-      mutationObserver.observe(document.body, { childList: true, subtree: true });
-    </script>
-  <script type="module" src="/index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>

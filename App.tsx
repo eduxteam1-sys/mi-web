@@ -1,86 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Services from './components/Product';
-import DataFlowUI from './components/DataFlowUI';
-import Reviews from './components/Reviews';
-import FAQ from './components/FAQ';
-import Contact from './components/Contact';
-import LoadingScreen from './components/LoadingScreen';
-import WhatsAppButton from './components/WhatsAppButton';
-import Footer from './components/Footer';
-import Background from './components/Background';
+
+import React from 'react';
+import VoiceInterface from './components/VoiceInterface';
 
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
   return (
-    <div className="relative min-h-screen text-[#e6e6e6] selection:bg-white selection:text-black">
-      <Background />
-      <Navbar />
-      
-      {/* Global Vector Connector UI (Strategy in Motion) */}
-      <div className="fixed inset-0 pointer-events-none z-[5] overflow-hidden opacity-10">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <path 
-            d="M 50% 0 L 50% 100% M 50% 80% C 70% 80% 90% 90% calc(100% - 48px) calc(100% - 48px)" 
-            stroke="url(#globalGradient)" 
-            strokeWidth="0.5" 
-            fill="none" 
-            strokeDasharray="10 20"
-            className="animate-dash-global"
-          />
-          <defs>
-            <linearGradient id="globalGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" />
-              <stop offset="100%" stopColor="#06b6d4" />
-            </linearGradient>
-          </defs>
-        </svg>
+    <div className="min-h-screen h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-slate-950">
+      {/* Fondo con degradado animado oscuro */}
+      <div className="absolute inset-0 z-0 animate-gradient-slow opacity-40">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-900 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-900 rounded-full blur-[120px]"></div>
+        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-indigo-900 rounded-full blur-[100px]"></div>
       </div>
-
-      <main className="relative z-10">
-        <Hero />
-        
-        <section id="servicios" className="bg-transparent relative">
-          <Services />
-        </section>
-
-        <DataFlowUI />
-
-        <section id="reviews" className="bg-transparent">
-          <Reviews />
-        </section>
-
-        <section id="faq" className="bg-transparent border-t border-[#22262e]/20">
-          <FAQ />
-        </section>
-
-        <section id="contacto" className="bg-transparent border-t border-[#22262e]/20">
-          <Contact />
-        </section>
-      </main>
       
-      <Footer />
-      <WhatsAppButton />
+      <header className="mb-4 md:mb-8 text-center z-10">
+        <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white uppercase drop-shadow-lg">
+          Sofía <span className="text-pink-500">AI</span>
+        </h1>
+        <div className="flex items-center justify-center gap-2">
+            <span className="h-1 w-12 bg-pink-500"></span>
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em]">Deep Voice Experience</p>
+            <span className="h-1 w-12 bg-pink-500"></span>
+        </div>
+      </header>
+      
+      <main className="w-full max-w-lg z-10 overflow-visible">
+        <VoiceInterface />
+      </main>
 
       <style>{`
-        @keyframes dash-global {
-          to { stroke-dashoffset: -500; }
+        @keyframes gradient-slow {
+          0% { transform: scale(1) translate(0, 0); }
+          50% { transform: scale(1.1) translate(2%, 2%); }
+          100% { transform: scale(1) translate(0, 0); }
         }
-        .animate-dash-global {
-          animation: dash-global 60s linear infinite;
+        .animate-gradient-slow {
+          animation: gradient-slow 20s ease-in-out infinite;
         }
       `}</style>
     </div>

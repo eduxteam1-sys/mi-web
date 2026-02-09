@@ -1,5 +1,9 @@
+
 {
-  "name": "JREX Performance-First Design Studio",
-  "description": "High-performance, minimalist professional landing page for JREX Studio. Focused on speed, clean typography, and mobile optimization.",
-  "requestFramePermissions": []
+  "name": "Sofía - Voice AI",
+  "description": "Asistente virtual con personalidad marplatense, geolocalización y noticias en tiempo real.",
+  "requestFramePermissions": [
+    "microphone",
+    "geolocation"
+  ]
 }
